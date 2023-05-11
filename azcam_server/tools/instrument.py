@@ -8,7 +8,7 @@ from typing import Any, List, Optional
 import azcam
 from azcam.header import Header, ObjectHeaderMethods
 from azcam.tools.tools import Tools
-from azcam.tools.console_tools import ConsoleTools
+from azcam_console.tools.console_tools import ConsoleTools
 
 
 class Instrument(Tools, ObjectHeaderMethods):
@@ -18,7 +18,6 @@ class Instrument(Tools, ObjectHeaderMethods):
     """
 
     def __init__(self, tool_id="instrument", description=None):
-
         Tools.__init__(self, tool_id, description)
 
         # active comparisons
@@ -287,6 +286,7 @@ class Instrument(Tools, ObjectHeaderMethods):
         """
 
         raise NotImplementedError
+
 
 class InstrumentConsole(ConsoleTools):
     """

@@ -1,25 +1,19 @@
 [project]
 name = "azcam-server"
-version = "23.0"
+version = "23.1"
 description = "Server application for AzCam acquisition and analysis package"
 license = {file ="LICENSE"}
 readme = "README.md"
 keywords=["ccd", "imaging", "astronomy", "sensors"]
 authors = [{name="Michael Lesser"},{email = "mlesser@arizona.edu"}]
 dependencies = [
-    "loguru",
     "numpy",
-    "matplotlib",
     "astropy",
-    "scipy",
     "pywin32; sys_platform == 'win32'",
     "fastapi",
     "uvicorn",
     "jinja2",
     "requests",
-    "pdfkit",
-    "markdown",
-    "pypdf2",
 ]
 
 [project.urls]

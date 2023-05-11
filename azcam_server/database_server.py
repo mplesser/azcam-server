@@ -1,59 +1,51 @@
 """
-*azcam.database* contains the main azcam database class.
+Contains the azcam database class for azcamserver.
 
 There is only one instance of this class which is referenced as `azcam.db` and contains
 temporary data for this current process.
 """
 
-from typing import Any, Union, List, Dict
+from dataclasses import dataclass, field
 
+from typing import Any, Union
+
+from azcam.database import AzcamDatabase
 from azcam.logger import Logger
-from azcam.parameters import Parameters
-from azcam.cmdserver import CommandServer
-from azcam.system import System
+from azcam_server.parameters_server import ParametersServer
+from azcam_server.cmdserver import CommandServer
 
 
-class AzcamConsoleDatabase(object):
+class AzcamDatabaseServer(AzcamDatabase):
     """
     The azcam database class.
     """
 
-    wd: Union[str, None] = None
-    """the current working directory"""
+    headers: dict = {}
+    """header objects"""
 
-    verbosity: int = 1
-    """verbosity level for messages"""
-
-    mode: str = ""
-    """operating mode (server or console)"""
-
-    abortflag: int = 0
-    """abort flag, 1 (true) if an abort has occurred"""
-
-    datafolder: str = ""
-    """system datafolder"""
-
-    tools: dict = {}
-    """dict of tools"""
-
-    shortcuts: dict = {}
-    """dict of shortcuts"""
-
-    scripts: dict = {}
-    """dict of scripts"""
+    headerorder: list = []
+    """header order in image header"""
 
     logger: Logger = Logger()
     """logger object"""
 
-    parameters: Parameters
+    parameters: ParametersServer = None
     """parameters object"""
 
-    # *************************************************************************
-    # db methods
-    # *************************************************************************
+    cmdserver: CommandServer = None
+    """system header object"""
 
-    def __init__(self) -> None:
-        pass
+
+@dataclass
+class Database:
+    """
+    AzCam server database dataclass.
+    """
+
+    tools: dict[str, int] = field(default_factory=dict)
+
+    #: working folder
+    wd: str = ""  #:working folder
 
     def get(self, name: str) -> Any:
         """

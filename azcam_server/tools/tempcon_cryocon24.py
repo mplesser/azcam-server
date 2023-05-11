@@ -28,7 +28,6 @@ class TempConCryoCon24(TempCon):
     """
 
     def __init__(self, tool_id="tempcon", description=None):
-
         super().__init__(tool_id, description)
 
         self.host = ""
@@ -162,7 +161,6 @@ class TempconServerInterface(object):
     """
 
     def __init__(self, host: str, port: int, name: str):
-
         self.host = host
         self.port = port
         self.connected = 0
@@ -205,7 +203,6 @@ class TempconServerInterface(object):
         """
 
         with self.lock:
-
             self.open()
             self.socket.sendto(
                 str.encode(command), (self.host, self.port + 1)

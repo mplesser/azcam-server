@@ -12,7 +12,6 @@ class TempConArchon(TempCon):
     """
 
     def __init__(self, tool_id="tempcon", description=None):
-
         super().__init__(tool_id, description)
 
         self.num_temp_reads = 1

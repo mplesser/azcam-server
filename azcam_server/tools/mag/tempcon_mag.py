@@ -12,7 +12,6 @@ class TempConMag(TempCon):
     """
 
     def __init__(self, tool_id="tempcon", description="Mag tempcon"):
-
         super().__init__(tool_id, description)
 
         self.num_temp_reads = 3

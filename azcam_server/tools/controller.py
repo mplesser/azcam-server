@@ -5,7 +5,7 @@ Contains the base Controller and DetPars classes.
 import azcam
 from azcam.header import Header, ObjectHeaderMethods
 from azcam.tools.tools import Tools
-from azcam.tools.console_tools import ConsoleTools
+from azcam_console.tools.console_tools import ConsoleTools
 
 
 class Controller(Tools, ObjectHeaderMethods):
@@ -205,6 +205,7 @@ class DetPars(object):
         self.rowoscm = 0
 
         return
+
 
 class ControllerConsole(ConsoleTools):
     """

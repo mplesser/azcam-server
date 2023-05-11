@@ -12,7 +12,6 @@ class TempConASCOM(TempCon):
     """
 
     def __init__(self, tool_id="tempcon", description=None):
-
         super().__init__(tool_id, description)
 
         self.temperature_ids = [0, 1]  # camtemp, dewtemp

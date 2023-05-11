@@ -7,14 +7,17 @@ import socket
 
 import azcam
 from azcam.logger import Logger
-from azcam.parameters import Parameters
+from azcam_server.parameters_server import ParametersServer
+from azcam_server.database_server import AzcamDatabaseServer
+from azcam_server.cmdserver import CommandServer
+
+azcam.db = AzcamDatabaseServer()  # overwrite azcamdatabase
 
 # server mode
-azcam.mode = "server"
-azcam.db.servermode = ""
+azcam.db.set("servermode", "")
 
 # parameters
-parameters = Parameters("azcamserver")
+azcam.db.parameters = ParametersServer()
 
 # logging
 azcam.db.logger = Logger()
@@ -28,3 +31,6 @@ azcam.db.set("hostip", socket.gethostbyname(hostname))
 # tool_id's which are reset or initialized with exposure
 azcam.db.set("tools_reset", {})
 azcam.db.set("tools_init", {})
+
+# command server
+azcam.db.cmdserver = CommandServer()

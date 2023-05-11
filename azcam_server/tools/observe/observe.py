@@ -8,7 +8,6 @@ import time
 import typing
 import azcam
 from azcam.tools.tools import Tools
-from azcam.tools.console_tools import ConsoleTools
 
 
 class Observe(Tools):
@@ -23,9 +22,13 @@ class Observe(Tools):
         self.mock = 1  # True to not  execute actual commands
         self.verbose = 1  # True to print extended info during execution
         self.number_cycles = 1  # number of times to run the script
-        self.move_telescope_during_readout = 0  # True to move the telescope during camera readout
+        self.move_telescope_during_readout = (
+            0  # True to move the telescope during camera readout
+        )
 
-        self.increment_status = 0  # True to increment status count if command in completed
+        self.increment_status = (
+            0  # True to increment status count if command in completed
+        )
         self._abort_gui = 0  # internal abort flag to stop
         self._paused = 0  # internal pause flag
         self._do_highlight = 0  # internal highlight row flag
@@ -168,7 +171,12 @@ class Observe(Tools):
         return
 
     def movetel(
-        self, ra: str = None, dec: str = None, az: str = None, alt: str = None, epoch: str = 2000.0
+        self,
+        ra: str = None,
+        dec: str = None,
+        az: str = None,
+        alt: str = None,
+        epoch: str = 2000.0,
     ):
         """
         Move the teleccope in either ra/dec or az/alt.
@@ -283,11 +291,17 @@ class Observe(Tools):
         elif self.focus_component == "telescope":
             return azcam.db.tools["telescope"].get_focus(focus_id)
 
-    def _set_focus(self, focus_value: float, focus_id: int = 0, focus_type: str = "absolute"):
+    def _set_focus(
+        self, focus_value: float, focus_id: int = 0, focus_type: str = "absolute"
+    ):
         if self.focus_component == "instrument":
-            return azcam.db.tools["instrument"].set_focus(focus_value, focus_id, focus_type)
+            return azcam.db.tools["instrument"].set_focus(
+                focus_value, focus_id, focus_type
+            )
         elif self.focus_component == "telescope":
-            return azcam.db.tools["telescope"].set_focus(focus_value, focus_id, focus_type)
+            return azcam.db.tools["telescope"].set_focus(
+                focus_value, focus_id, focus_type
+            )
 
     def read_file(self, script_file):
         """
@@ -343,7 +357,11 @@ class Observe(Tools):
             tokens = azcam.utils.parse(line)
 
             # comment line, special case
-            if line.startswith("#") or line.startswith("!") or line.startswith("comment"):
+            if (
+                line.startswith("#")
+                or line.startswith("!")
+                or line.startswith("comment")
+            ):
                 cmd = "comment"
                 arg = line[1:].strip()
 
@@ -571,7 +589,9 @@ class Observe(Tools):
         # begin execution loop
         for loop in range(self.number_cycles):
             if self.number_cycles > 1:
-                self.log("*** Script cycle %d of %d ***" % (loop + 1, self.number_cycles))
+                self.log(
+                    "*** Script cycle %d of %d ***" % (loop + 1, self.number_cycles)
+                )
 
             for linenumber, command in enumerate(self.commands):
                 stop = 0
@@ -579,7 +599,9 @@ class Observe(Tools):
                 line = command["line"]
                 status = command["status"]
 
-                self.log("Command %03d/%03d: %s" % (linenumber, len(self.commands), line))
+                self.log(
+                    "Command %03d/%03d: %s" % (linenumber, len(self.commands), line)
+                )
 
                 # execute the command
                 reply = self.execute_command(linenumber)
@@ -773,10 +795,14 @@ class Observe(Tools):
                 try:
                     if self.azalt_mode:
                         self.log("Moving telescope now to Az: %s, Alt: %s" % (ra, dec))
-                        reply = azcam.db.tools["server"].command(f"telescope.move_azalt {ra} {dec}")
+                        reply = azcam.db.tools["server"].command(
+                            f"telescope.move_azalt {ra} {dec}"
+                        )
                     else:
                         self.log("Moving telescope now to RA: %s, DEC: %s" % (ra, dec))
-                        reply = azcam.db.tools["server"].command(f"telescope.move {ra} {dec}")
+                        reply = azcam.db.tools["server"].command(
+                            f"telescope.move {ra} {dec}"
+                        )
                 except azcam.AzcamError as e:
                     return f"ERROR {e}"
             else:
@@ -834,10 +860,14 @@ class Observe(Tools):
                                     check_header = 1
                                     while check_header:
                                         header_updating = int(
-                                            azcam.db.parameters.get_par("exposureupdatingheader")
+                                            azcam.db.parameters.get_par(
+                                                "exposureupdatingheader"
+                                            )
                                         )
                                         if header_updating:
-                                            self.log("Waiting for header to finish updating...")
+                                            self.log(
+                                                "Waiting for header to finish updating..."
+                                            )
                                             time.sleep(0.5)
                                         else:
                                             check_header = 0
@@ -874,23 +904,3 @@ class Observe(Tools):
                     return "QUIT"
 
         return "OK"
-
-
-class ObserveConsole(ConsoleTools):
-    """
-    Observe tool for consoles.
-    Usually implemented as the "observe" tool.
-    """
-
-    def __init__(self) -> None:
-        super().__init__("observe")
-
-    def delay(self, seconds: float = None):
-        """
-        Delay by a number of seconds.
-
-        :param seconds:
-
-        """
-
-        return azcam.db.tools["server"].command(f"{self.objname}.delay {seconds}")

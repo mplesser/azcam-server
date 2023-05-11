@@ -13,23 +13,23 @@ import ctypes
 from runpy import run_path
 
 import azcam
-import azcam.server
-import azcam.shortcuts
-from azcam.logger import check_for_remote_logger
-import azcam.scripts
+import azcam_server.server
 
-from azcam.cmdserver import CommandServer
+from azcam.logger import check_for_remote_logger
 from azcam.tools.controller import Controller
 from azcam.tools.instrument import Instrument
 from azcam.tools.tempcon import TempCon
 from azcam.tools.display import Display
 from azcam.tools.telescope import Telescope
 from azcam.tools.exposure import Exposure
-from azcam.tools.webserver.fastapi_server import WebServer
-from azcam.tools.webtools.exptool.exptool import Exptool
-from azcam.tools.webtools.status.status import Status
-from azcam.tools.queue import Queue
-from azcam.tools.observe.observe import Observe
+
+import azcam_server.shortcuts
+import azcam_server.scripts
+from azcam_server.cmdserver import CommandServer
+from azcam_server.tools.webserver.fastapi_server import WebServer
+from azcam_server.tools.webtools.exptool.exptool import Exptool
+from azcam_server.tools.webtools.status.status import Status
+from azcam_server.tools.observe.observe import Observe
 
 # ****************************************************************
 # parse command line arguments
@@ -64,7 +64,9 @@ if datafolder is None:
             droot = os.environ.get("HOME")
         else:
             droot = "/"
-        azcam.db.datafolder = os.path.join(os.path.realpath(droot), "data", azcam.db.systemname)
+        azcam.db.datafolder = os.path.join(
+            os.path.realpath(droot), "data", azcam.db.systemname
+        )
     else:
         azcam.db.datafolder = os.path.join(os.path.realpath(droot), azcam.db.systemname)
 else:
@@ -109,16 +111,13 @@ tempcon = TempCon()
 tempcon.enabled = 0
 display = Display()
 exposure = Exposure()
-# queue = Queue()
-# queue.initialize()
-# queue.initialize()
 observe = Observe()
 
 # ****************************************************************
 # scripts
 # ****************************************************************
 azcam.log("Loading scripts")
-azcam.scripts.load("server")
+azcam_server.scripts.load()
 
 # ****************************************************************
 # web server
@@ -153,7 +152,7 @@ azcam.log(f"Starting cmdserver - listening on port {cmdserver.port}")
 cmdserver.start()
 
 # cli commands
-from azcam.cli import *
+from azcam_server.cli import *
 
 # try to change window title
 try:
