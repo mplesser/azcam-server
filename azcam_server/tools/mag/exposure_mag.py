@@ -6,7 +6,7 @@ import os
 import time
 
 import azcam
-from azcam.tools.exposure import Exposure
+from azazcam_servercam.tools.exposure import Exposure
 
 from .receive_data import ReceiveData
 
@@ -17,7 +17,6 @@ class ExposureMag(Exposure):
     """
 
     def __init__(self, tool_id="exposure", description=None):
-
         super().__init__(tool_id, description)
 
         self.receive_data = ReceiveData(self)
@@ -173,7 +172,6 @@ class ExposureMag(Exposure):
 
         # write file(s) to disk
         if self.save_file:
-
             azcam.log("Writing %s" % local_file)
 
             # write the file to disk

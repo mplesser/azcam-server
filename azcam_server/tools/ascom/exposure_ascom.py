@@ -7,7 +7,7 @@ import time
 import numpy
 
 import azcam
-from azcam.tools.exposure import Exposure
+from azcam_server.tools.exposure import Exposure
 
 
 class ExposureASCOM(Exposure):
@@ -16,7 +16,6 @@ class ExposureASCOM(Exposure):
     """
 
     def __init__(self, tool_id="exposure", description=None):
-
         super().__init__(tool_id, description)
 
         self.exp_start = 0
@@ -137,7 +136,6 @@ class ExposureASCOM(Exposure):
 
         # write file(s) to disk
         if self.save_file:
-
             azcam.log("Writing %s" % local_file)
 
             # write the file to disk

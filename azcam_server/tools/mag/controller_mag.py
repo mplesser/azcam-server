@@ -6,7 +6,7 @@ import os
 import time
 
 import azcam
-from azcam.tools.controller import Controller
+from azcam_server.tools.controller import Controller
 
 from .camera_server import CameraServerInterface
 
@@ -26,7 +26,6 @@ class ControllerMag(Controller):
     """
 
     def __init__(self, tool_id="controller", description=None):
-
         super().__init__(tool_id, description)
 
         # selected video channel(s) for switched systems

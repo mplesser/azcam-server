@@ -1,3 +1,3 @@
 """
-Observign script tools.
+Observing script tools.
 """

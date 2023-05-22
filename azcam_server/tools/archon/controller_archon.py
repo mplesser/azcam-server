@@ -8,7 +8,7 @@ import threading
 
 import azcam
 import azcam.sockets
-from azcam.tools.controller import Controller
+from azcam_server.tools.controller import Controller
 
 # Exposure states
 EXP_UNKNOWN = 0
@@ -25,7 +25,6 @@ class ControllerArchon(Controller):
     """
 
     def __init__(self, tool_id="controller", description=None):
-
         super().__init__(tool_id, description)
 
         self.controller_class = "archon"
@@ -233,7 +232,6 @@ class ControllerArchon(Controller):
         """
 
         with self.lock:
-
             if not self.camserver.open():
                 raise azcam.AzcamError("Could not open connection to controller")
 
@@ -499,7 +497,6 @@ class ControllerArchon(Controller):
         """
 
         if not self.config_ok:
-
             raise azcam.AzcamError("Config data not loaded")
         valPixels = 0
         valLines = 0
@@ -538,7 +535,6 @@ class ControllerArchon(Controller):
         """
 
         if len(self.dict_config) <= 0:
-
             raise azcam.AzcamError("Config data not loaded")
         if self.lines != Lines:
             self.lines = Lines
@@ -873,7 +869,6 @@ class ControllerArchon(Controller):
         lenCDS = len(self.cds)
 
         for tapLinesCnt in range(lenCDS):
-
             tapLine = "TAPLINE" + str(tapLinesCnt)
             indx = self.dict_wconfig[tapLine]
             cmd = "WCONFIG%04X%s=%s" % (indx & 0xFFFF, tapLine, self.cds[tapLinesCnt])
@@ -939,7 +934,6 @@ class ControllerArchon(Controller):
         """
 
         if self.cont_exp != cont_exp:
-
             if not self.config_ok:
                 raise azcam.AzcamError("Configuration data not loaded")
 
@@ -1060,7 +1054,6 @@ class ControllerArchon(Controller):
         """
 
         if self.exp != Exp:
-
             if not self.config_ok:
                 raise azcam.AzcamError("Configuration data not loaded")
 
@@ -1500,7 +1493,6 @@ class ControllerArchon(Controller):
         # wait for frame to change in buffers
         azcam.log("Integrating", level=1)
         while stop == 0:
-
             # Get frame and update frame dictionary
             self.get_frame()
 
@@ -1566,7 +1558,6 @@ class ControllerArchon(Controller):
         cnt = 0
 
         while dataReady == 0 and cnt < 500:
-
             # Get frame and update frame dictionary
             time.sleep(0.50)
             self.get_frame()

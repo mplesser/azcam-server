@@ -5,7 +5,7 @@ Contains the TempConArc class.
 import math
 
 import azcam
-from azcam.tools.tempcon import TempCon
+from azcam_server.tools.tempcon import TempCon
 
 
 class TempConArc(TempCon):

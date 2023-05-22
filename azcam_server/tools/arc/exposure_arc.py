@@ -7,7 +7,7 @@ import threading
 import time
 
 import azcam
-from azcam.tools.exposure import Exposure
+from azcam_server.tools.exposure import Exposure
 
 from .receive_data import ReceiveData
 
@@ -18,7 +18,6 @@ class ExposureArc(Exposure):
     """
 
     def __init__(self, tool_id="exposure", description=None):
-
         super().__init__(tool_id, description)
 
         self.receive_data = ReceiveData(self)

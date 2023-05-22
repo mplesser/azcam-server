@@ -3,7 +3,7 @@ Contains the TempConASCOM class.
 """
 
 import azcam
-from azcam.tools.tempcon import TempCon
+from azcam_server.tools.tempcon import TempCon
 
 
 class TempConASCOM(TempCon):

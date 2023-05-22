@@ -1,12 +1,11 @@
 """
 Contains the Focus class.
-This is a common version which may be used for server and console processes.
 """
 
 import time
 
 import azcam
-from azcam.tools.tools import Tools
+from azcam.tools import Tools
 
 
 class Focus(Tools):
@@ -14,10 +13,9 @@ class Focus(Tools):
     Class for focusing a camera.
 
     Either the telescope or instrument may be moved for focus adjustment.
-    May be used as a server or client script.
     The focus sequence performed is:
 
-    - expose
+    - integrate
     - move focus
     - shift detector (2x last time)
     - (repeat above steps)
@@ -28,7 +26,7 @@ class Focus(Tools):
 
     def __init__(self):
         """
-        Create focus tool for server or console mode.
+        Create focus tool.
         """
 
         super().__init__("focus")
@@ -177,14 +175,13 @@ class Focus(Tools):
         detector_shift: [int, str] = "prompt",
     ):
         """
-        Execute the focus script.
-        Parameters can be "prompt" or a value.
+        Execute the focus sequence.
         If focus.set_pars() was previously called then those values are used and input here is ignored.
         Args:
             number_exposures: Number of exposures in focus sequence.
             focus_step: Number of focus steps between each exposure in a frame.
             detector_shift: Number of rows to shift detector for each focus step.
-            exposuretime: Exposure time i seconds.
+            exposuretime: Exposure time in seconds.
         """
 
         if self.set_pars_called:
@@ -248,7 +245,6 @@ class Focus(Tools):
 
         nsteps = 0  # total number of focus steps
         while current_exposure <= self.number_exposures:
-
             # check for abort
             k = azcam.utils.check_keyboard(0)
             ab = azcam.db.abortflag

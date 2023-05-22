@@ -3,7 +3,7 @@ Contains the base TempConMag class.
 """
 
 import azcam
-from azcam.tools.tempcon import TempCon
+from azcam_server.tools.tempcon import TempCon
 
 
 class TempConMag(TempCon):

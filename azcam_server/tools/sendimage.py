@@ -3,7 +3,7 @@ import socket
 import time
 
 import azcam
-from azcam.tools.tools import Tools
+from azcam.tools import Tools
 
 
 class SendImage(Tools):
@@ -12,7 +12,6 @@ class SendImage(Tools):
     """
 
     def __init__(self, tool_id="sendimage", description=None):
-
         super().__init__(tool_id, description)
 
         self.remote_imageserver_host = ""
@@ -353,8 +352,8 @@ class SendImage(Tools):
 
         # send file data
         buff = azcam.db.tools["exposure"].image.data[0]
-        numsent = ccdacqsocket.send(buff) 
-        if numsent != 2*len(buff):
+        numsent = ccdacqsocket.send(buff)
+        if numsent != 2 * len(buff):
             raise azcam.AzcamError(f"Could not send all image data to ccdacq server")
 
         # wait before closing

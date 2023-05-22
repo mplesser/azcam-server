@@ -8,7 +8,7 @@ from datetime import datetime
 import win32com.client
 
 import azcam
-from azcam.tools.controller import Controller
+from azcam_server.tools.controller import Controller
 
 
 class ControllerASCOM(Controller):
@@ -17,7 +17,6 @@ class ControllerASCOM(Controller):
     """
 
     def __init__(self, tool_id="controller", description=None):
-
         super().__init__(tool_id, description)
 
         self.controller_class = "ASCOM"
@@ -119,7 +118,6 @@ class ControllerASCOM(Controller):
         return
 
     def get_exposuretime(self):
-
         return self.exposure_time
 
     def start_exposure(self):
@@ -176,7 +174,6 @@ class ControllerASCOM(Controller):
         return 0
 
     def set_roi(self):
-
         self.camera.BinX = min(self.detpars.col_bin, self.camera.MaxBinX)
         self.camera.BinY = min(self.detpars.row_bin, self.camera.MaxBinY)
 

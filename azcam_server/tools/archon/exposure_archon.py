@@ -8,7 +8,7 @@ import time
 import numpy
 
 import azcam
-from azcam.tools.exposure import Exposure
+from azcam_server.tools.exposure import Exposure
 from astropy.io import fits as pyfits
 
 
@@ -20,7 +20,6 @@ class ExposureArchon(Exposure):
     """
 
     def __init__(self, tool_id="exposure", description=None):
-
         super().__init__(tool_id, description)
 
         self.receive_data = ReceiveDataArchon(self)
@@ -160,7 +159,6 @@ class ExposureArchon(Exposure):
 
         # add info data in extra extensions
         if self.add_extensions:
-
             azcam.db.tools["controller"].get_status()  # get current controller data
 
             # create data arrays
@@ -270,7 +268,6 @@ class ArchonFileConverter(object):
     """
 
     def __init__(self):
-
         # save MEF file
         self.save_file = 0
         # output buffer
@@ -385,16 +382,13 @@ class ArchonFileConverter(object):
 
         # mosaic special case - Archon buffer is Nx1 - 20jan23
         if azcam.db.tools["exposure"].image.focalplane.num_detectors > 1:
-
             # reshape the input data array copy
             # self.NData = self.data.reshape(self.NAMPS * self.LINES, self.PIXELS).copy()
             self.NData = self.data.reshape([self.NAMPS, self.PIXELS * self.LINES]).copy()
 
             # loop through all lines in Archon buffer
             for currLine in range(0, self.LINES):
-
                 for posY in range(0, self.numparamps):
-
                     for posX in range(0, self.numseramps):
                         posAmp = posX + posY * self.numseramps
 
@@ -509,7 +503,7 @@ class ArchonFileConverter(object):
         self.ext_name = sensor_data["ext_name"]
         self.ext_number = sensor_data["ext_number"]
         self.jpg_ext = sensor_data["jpg_order"]
-        #self.amp_cfg = sensor_data["amp_cfg"]
+        # self.amp_cfg = sensor_data["amp_cfg"]
         self.amp_cfg = azcam.db.tools["exposure"].image.focalplane.amp_cfg
 
         self.extpos_x = [x[0] for x in sensor_data["ext_position"]]
@@ -543,7 +537,6 @@ class ReceiveDataArchon(object):
     """
 
     def __init__(self, exposure):
-
         self.exposure = exposure  # upper level exposure object
 
         self.DeinterlaceParams = ""
@@ -583,12 +576,10 @@ class ReceiveDataArchon(object):
             azcam.db.tools["controller"].read_buffer > 0
             and azcam.db.tools["controller"].read_buffer < 4
         ):
-
             frameBase = "BUF%d" % (azcam.db.tools["controller"].read_buffer)
             frame = frameBase + "FRAME"
 
             if int(azcam.db.tools["controller"].dict_frame[frame]) > 0:
-
                 # frame buffer base address
                 addr = int(azcam.db.tools["controller"].dict_frame[frameBase + "BASE"])
                 # get frame width and height

@@ -16,20 +16,21 @@ import azcam
 import azcam_server.server
 
 from azcam.logger import check_for_remote_logger
-from azcam.tools.controller import Controller
-from azcam.tools.instrument import Instrument
-from azcam.tools.tempcon import TempCon
-from azcam.tools.display import Display
-from azcam.tools.telescope import Telescope
-from azcam.tools.exposure import Exposure
 
-import azcam_server.shortcuts
-import azcam_server.scripts
+from azcam_server.tools.controller import Controller
+from azcam_server.tools.instrument import Instrument
+from azcam_server.tools.tempcon import TempCon
+from azcam_server.tools.display import Display
+from azcam_server.tools.telescope import Telescope
+from azcam_server.tools.exposure import Exposure
 from azcam_server.cmdserver import CommandServer
 from azcam_server.tools.webserver.fastapi_server import WebServer
 from azcam_server.tools.webtools.exptool.exptool import Exptool
 from azcam_server.tools.webtools.status.status import Status
 from azcam_server.tools.observe.observe import Observe
+from azcam_server.tools.focus import Focus
+import azcam_server.shortcuts
+import azcam_server.scripts
 
 # ****************************************************************
 # parse command line arguments
@@ -64,9 +65,7 @@ if datafolder is None:
             droot = os.environ.get("HOME")
         else:
             droot = "/"
-        azcam.db.datafolder = os.path.join(
-            os.path.realpath(droot), "data", azcam.db.systemname
-        )
+        azcam.db.datafolder = os.path.join(os.path.realpath(droot), "data", azcam.db.systemname)
     else:
         azcam.db.datafolder = os.path.join(os.path.realpath(droot), azcam.db.systemname)
 else:
@@ -112,6 +111,7 @@ tempcon.enabled = 0
 display = Display()
 exposure = Exposure()
 observe = Observe()
+focus = Focus()
 
 # ****************************************************************
 # scripts

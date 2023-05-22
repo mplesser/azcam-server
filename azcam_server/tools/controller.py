@@ -4,8 +4,7 @@ Contains the base Controller and DetPars classes.
 
 import azcam
 from azcam.header import Header, ObjectHeaderMethods
-from azcam.tools.tools import Tools
-from azcam_console.tools.console_tools import ConsoleTools
+from azcam.tools import Tools
 
 
 class Controller(Tools, ObjectHeaderMethods):
@@ -43,7 +42,7 @@ class Controller(Tools, ObjectHeaderMethods):
 
     def set_roi(self):
         """
-        Sets ROI parameters values in the controller based on focalplane parameters.
+        XXXSets ROI parameters values in the controller based on focalplane parameters.
         """
 
         return
@@ -87,6 +86,13 @@ class Controller(Tools, ObjectHeaderMethods):
     def stop_idle(self):
         """
         Stop idle clocking.
+        """
+
+        return
+
+    def set_exposuretime(self, ExposureTime: float):
+        """
+        Write the exposure time (in seconds) to the controller.
         """
 
         return
@@ -205,23 +211,3 @@ class DetPars(object):
         self.rowoscm = 0
 
         return
-
-
-class ControllerConsole(ConsoleTools):
-    """
-    Controller tool for consoles.
-    Usually implemented as the "controller" tool.
-    """
-
-    def __init__(self) -> None:
-        super().__init__("controller")
-
-    def set_shutter(self, state: int = 0):
-        """
-        Open or close a shutter.
-
-        :param state:
-
-        """
-
-        return azcam.db.tools["server"].command(f"{self.objname}.set_shutter {state}")

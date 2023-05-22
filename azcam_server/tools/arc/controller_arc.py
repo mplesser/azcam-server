@@ -5,7 +5,7 @@ Contains the ControllerArc class.
 import os
 
 import azcam
-from azcam.tools.controller import Controller
+from azcam_server.tools.controller import Controller
 
 from .camera_server import CameraServerInterface
 
@@ -16,7 +16,6 @@ class ControllerArc(Controller):
     """
 
     def __init__(self, tool_id="controller", description=None):
-
         super().__init__(tool_id, description)
 
         self.controller_class = "arc"
@@ -855,7 +854,7 @@ class ControllerArc(Controller):
 
     # *** exposure time ***
 
-    def set_exposuretime(self, ExposureTime):
+    def set_exposuretime(self, ExposureTime: float):
         """
         Write the exposure time (in seconds) to the controller.
         """
