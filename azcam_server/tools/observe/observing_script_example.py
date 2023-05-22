@@ -1,5 +1,5 @@
 # import observe for observing command use
-from azcam.tools.observe.observe import Observe, ObserveConsole
+from azcam_server.tools.observe.observe import Observe
 
 # this is a single line comment python style
 # use blocks with start/end triple quotes for multi-line comments

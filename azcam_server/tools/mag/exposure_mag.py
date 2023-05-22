@@ -6,7 +6,7 @@ import os
 import time
 
 import azcam
-from azazcam_servercam.tools.exposure import Exposure
+from azcam_server.tools.exposure import Exposure
 
 from .receive_data import ReceiveData
 

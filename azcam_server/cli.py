@@ -11,15 +11,20 @@ import azcam
 db = azcam.db
 
 # directly put tools in namespace
-for name in azcam.db.tools:
-    globals()[name] = azcam.db.tools[name]
-for name in azcam.db.shortcuts:
-    globals()[name] = azcam.db.shortcuts[name]
-for name in azcam.db.scripts:
-    globals()[name] = azcam.db.scripts[name]
+try:
+    for name in azcam.db.tools:
+        globals()[name] = azcam.db.tools[name]
+    for name in azcam.db.shortcuts:
+        globals()[name] = azcam.db.shortcuts[name]
+    for name in azcam.db.scripts:
+        globals()[name] = azcam.db.scripts[name]
 
-__all__ = (
-    [x for x in azcam.db.tools] + [x for x in azcam.db.shortcuts] + [x for x in azcam.db.scripts]
-)
-__all__.append("azcam")
-__all__.append("db")
+    __all__ = (
+        [x for x in azcam.db.tools]
+        + [x for x in azcam.db.shortcuts]
+        + [x for x in azcam.db.scripts]
+    )
+    __all__.append("azcam")
+    __all__.append("db")
+except Exception:
+    pass
