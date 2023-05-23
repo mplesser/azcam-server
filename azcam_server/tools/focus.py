@@ -24,12 +24,12 @@ class Focus(Tools):
     - save image
     """
 
-    def __init__(self):
+    def __init__(self, tool_id="focus", description=None):
         """
         Create focus tool.
         """
 
-        super().__init__("focus")
+        super().__init__(tool_id, description)
 
         #: Number of exposures in focus sequence
         self.number_exposures = 7
@@ -57,7 +57,6 @@ class Focus(Tools):
         Initialize focus routine.
         """
 
-        self.parameters = azcam.db.parameters
         self.exposure = azcam.db.tools["exposure"]
         try:
             self.instrument = azcam.db.tools["instrument"]
@@ -215,20 +214,22 @@ class Focus(Tools):
         self.exposure.set_exposuretime(self.exposure_time)
 
         # save parameters to be changed
-        root = self.parameters.get_par("imageroot")
-        includesequencenumber = self.parameters.get_par("imageincludesequencenumber")
-        autoname = self.parameters.get_par("imageautoname")
-        autoincrementsequencenumber = self.parameters.get_par("imageautoincrementsequencenumber")
-        title = self.parameters.get_par("imagetitle")
-        testimage = self.parameters.get_par("imagetest")
-        imagetype = self.parameters.get_par("imagetype")
+        root = azcam.db.parameters.get_par("imageroot")
+        includesequencenumber = azcam.db.parameters.get_par("imageincludesequencenumber")
+        autoname = azcam.db.parameters.get_par("imageautoname")
+        autoincrementsequencenumber = azcam.db.parameters.get_par(
+            "imageautoincrementsequencenumber"
+        )
+        title = azcam.db.parameters.get_par("imagetitle")
+        testimage = azcam.db.parameters.get_par("imagetest")
+        imagetype = azcam.db.parameters.get_par("imagetype")
 
-        self.parameters.set_par("imageroot", "focus.")
-        self.parameters.set_par("imageincludesequencenumber", 1)
-        self.parameters.set_par("imageautoname", 0)
-        self.parameters.set_par("imageautoincrementsequencenumber", 1)
-        self.parameters.set_par("imagetest", 0)
-        self.parameters.set_par("imageoverwrite", 1)
+        azcam.db.parameters.set_par("imageroot", "focus.")
+        azcam.db.parameters.set_par("imageincludesequencenumber", 1)
+        azcam.db.parameters.set_par("imageautoname", 0)
+        azcam.db.parameters.set_par("imageautoincrementsequencenumber", 1)
+        azcam.db.parameters.set_par("imagetest", 0)
+        azcam.db.parameters.set_par("imageoverwrite", 1)
 
         # set header keywords
         self.save_keywords()
@@ -283,15 +284,15 @@ class Focus(Tools):
             except azcam.AzcamError:
                 azcam.log("Focus exposure aborted")
                 self._set_focus(starting_focus_value)
-                self.parameters.set_par("imageroot", root)
-                self.parameters.set_par("imageincludesequencenumber", includesequencenumber)
-                self.parameters.set_par("imageautoname", autoname)
-                self.parameters.set_par(
+                azcam.db.parameters.set_par("imageroot", root)
+                azcam.db.parameters.set_par("imageincludesequencenumber", includesequencenumber)
+                azcam.db.parameters.set_par("imageautoname", autoname)
+                azcam.db.parameters.set_par(
                     "imageautoincrementsequencenumber", autoincrementsequencenumber
                 )
-                self.parameters.set_par("imagetest", testimage)
-                self.parameters.set_par("imagetitle", title)
-                self.parameters.set_par("imagetype", imagetype)
+                azcam.db.parameters.set_par("imagetest", testimage)
+                azcam.db.parameters.set_par("imagetitle", title)
+                azcam.db.parameters.set_par("imagetype", imagetype)
                 fp = self._get_focus()
                 azcam.log("Current focus: %.3f" % fp)
                 return
@@ -316,15 +317,15 @@ class Focus(Tools):
             self.exposure.readout()
             self.exposure.end()
         else:
-            self.parameters.set_par("ExposureFlag", azcam.db.exposureflags["NONE"])
+            azcam.db.parameters.set_par("ExposureFlag", azcam.db.exposureflags["NONE"])
 
         # finish
-        self.parameters.set_par("imageroot", root)
-        self.parameters.set_par("imageincludesequencenumber", includesequencenumber)
-        self.parameters.set_par("imageautoname", autoname)
-        self.parameters.set_par("imageautoincrementsequencenumber", autoincrementsequencenumber)
-        self.parameters.set_par("imagetest", testimage)
-        self.parameters.set_par("imagetitle", title)
-        self.parameters.set_par("imagetype", imagetype)
+        azcam.db.parameters.set_par("imageroot", root)
+        azcam.db.parameters.set_par("imageincludesequencenumber", includesequencenumber)
+        azcam.db.parameters.set_par("imageautoname", autoname)
+        azcam.db.parameters.set_par("imageautoincrementsequencenumber", autoincrementsequencenumber)
+        azcam.db.parameters.set_par("imagetest", testimage)
+        azcam.db.parameters.set_par("imagetitle", title)
+        azcam.db.parameters.set_par("imagetype", imagetype)
 
         return

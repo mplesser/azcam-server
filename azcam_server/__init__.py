@@ -7,6 +7,8 @@ and data reduction requirements.
 
 from importlib import metadata
 
+from azcam_server.parameters_server import ParametersServer
+
 __version__ = metadata.version(__package__)
 __version_info__ = tuple(int(i) for i in __version__.split(".") if i.isdigit())
 
