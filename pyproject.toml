@@ -1,6 +1,6 @@
 [project]
 name = "azcam-server"
-version = "23.1"
+version = "23.2"
 description = "Server application for AzCam acquisition and analysis package"
 license = {file ="LICENSE"}
 readme = "README.md"
@@ -21,7 +21,7 @@ Documentation = "https://mplesser.github.io/azcam/"
 Repository = "https://github.com/mplesser/azcam/"
 
 [project.scripts]
-azcam = "azcam_server.start:start"
+azcamserver = "azcam_server.start:start"
 
 [build-system]
 requires = ["flit_core >=3.2,<4"]

@@ -1,12 +1,4 @@
-graft azcam_fastapi/static
+graft docs
 
-include azcam_observe/webobs/observe.html
-include azcam_observe/webobs/static_webobs/*
-
-graft docs_observe
-include azcam_testers/report.css
-
-include azcam_webtools/status/status.html
-include azcam_webtools/exptool/exptool.html
-include azcam_webtools/webobs/webobs.html
-include azcam_webtools/static_status/*
+include azcam_server/tools/webtools/status/status.html
+include azcam_server/tools/webtools/exptool/exptool.html
