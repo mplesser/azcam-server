@@ -74,9 +74,9 @@ class ParametersServer(Parameters):
             value = azcam.db.logger.get_logdata()
             return value
 
-        # parameter must be in pardict
+        # parameter must be in par_table
         try:
-            attribute = azcam.db.pardict[parameter]
+            attribute = azcam.db.par_table[parameter]
         except KeyError:
             azcam.AzcamWarning(f"Parameter {parameter} not available for get_par")
             return None
@@ -133,10 +133,13 @@ class ParametersServer(Parameters):
         elif parameter == "logcommands":
             azcam.db.cmdserver.logcommands = int(value)
             return None
+        elif parameter == "wd":
+            azcam.utils.curdir(value)
+            return None
 
-        # parameter must be in parameters
+        # parameter must be in par_table
         try:
-            attribute = azcam.db.pardict[parameter]
+            attribute = azcam.db.par_table[parameter]
         except KeyError:
             azcam.AzcamWarning(f"Parameter {parameter} not available for set_par")
             return None
@@ -169,3 +172,13 @@ class ParametersServer(Parameters):
             pass
 
         return None
+
+    # TODO - below is for compatibility with azcamtool only - to be removed
+
+    def set_script_par(self, attribute, value, par_dict_id) -> None:
+        azcam.db.parameters.par_dict[par_dict_id][attribute] = value
+        return
+
+    def get_script_par(self, par_dict_id, attribute) -> typing.Any:
+        reply = azcam.db.parameters.par_dict[par_dict_id][attribute]
+        return reply

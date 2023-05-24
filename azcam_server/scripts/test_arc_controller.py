@@ -7,7 +7,10 @@ import sys
 import azcam
 
 
-def test_arc_controller(cycles=10):
+def test_arc_controller(cycles: int = 10):
+    """
+    Test ARC controller.
+    """
 
     cycles = int(cycles)
 
@@ -50,4 +53,4 @@ def test_arc_controller(cycles=10):
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    test_arc_controller(*args)
+    test_arc_controller(int(*args))

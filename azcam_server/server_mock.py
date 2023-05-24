@@ -30,7 +30,7 @@ from azcam_server.tools.webtools.status.status import Status
 from azcam_server.tools.observe.observe import Observe
 from azcam_server.tools.focus import Focus
 import azcam_server.shortcuts
-import azcam_server.scripts
+from azcam.scripts import loadscripts
 
 # ****************************************************************
 # parse command line arguments
@@ -117,7 +117,7 @@ focus = Focus()
 # scripts
 # ****************************************************************
 azcam.log("Loading scripts")
-azcam_server.scripts.load()
+loadscripts(["azcam_server.scripts"])
 
 # ****************************************************************
 # web server
