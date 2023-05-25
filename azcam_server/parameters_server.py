@@ -11,6 +11,7 @@ from azcam.parameters import Parameters
 class ParametersServer(Parameters):
     """
     Main class for server parameters tool.
+    This tool sets the default subdict to *azcamserver*.
     """
 
     def __init__(self):
@@ -20,6 +21,8 @@ class ParametersServer(Parameters):
 
         Parameters.__init__(self, "azcamserver")
 
+
+'''
     def get_par(self, parameter: str) -> typing.Any:
         """
         Return the value of a parameter in the parameters dictionary.
@@ -182,3 +185,4 @@ class ParametersServer(Parameters):
     def get_script_par(self, par_dict_id, attribute) -> typing.Any:
         reply = azcam.db.parameters.par_dict[par_dict_id][attribute]
         return reply
+'''
