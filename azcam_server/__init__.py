@@ -1,8 +1,5 @@
 """
-AzCam is a software framework for the acquisition and analysis of image data
-from scientific imaging systems as well as the control of instrumentation.
-It is intended to be customized for specific hardware, observational,
-and data reduction requirements.
+*azcam_server* supports the server-side code for the AzCam image acquisition and analysis package.
 """
 
 from importlib import metadata

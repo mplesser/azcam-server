@@ -7,6 +7,7 @@ import socket
 import socketserver
 import threading
 import time
+from typing import Callable
 
 import azcam
 
@@ -25,7 +26,6 @@ class CommandServer(socketserver.ThreadingTCPServer):
     """
 
     def __init__(self, port=2402):
-
         self.welcome_message = None
 
         self.port = port  # listen port
@@ -98,11 +98,160 @@ class CommandServer(socketserver.ThreadingTCPServer):
         Returns the reply string, always starting with OK or ERROR.
         """
 
-        toolid, args, kwargs = azcam.utils.parse_command_string(command, self.case_insensitive)
+        toolid, args, kwargs = self.parse_command_string(command, self.case_insensitive)
 
-        reply = azcam.utils.execute_command(toolid, args, kwargs)
+        reply = self.execute_command(toolid, args, kwargs)
 
         return reply
+
+    def execute_command(self, tool: Callable, args: list, kwargs: dict = {}) -> str:
+        """
+        Executes a tool command which has been parsed into tool method and arguments and
+        returns its reply string.
+
+        Args:
+            tool: tool object (not name)
+            args: list of arguments
+            kwargs: dictionary of keyword:value pairs for arguments
+
+        Returns:
+            reply: reply from command executed. Always starts with OK or ERROR.
+        """
+
+        if len(args) == 0 and len(kwargs) == 0:
+            reply = tool()
+
+        elif len(kwargs) == 0:
+            reply = tool(*args)
+
+        elif len(args) == 0:
+            reply = tool(**kwargs)
+
+        else:
+            reply = tool(*args, **kwargs)
+
+        reply = self._command_reply(reply)
+
+        return reply
+
+    def _command_reply(self, reply: str):
+        """
+        Create a reply string for a socket command.
+
+        Args:
+            reply (str): command reply
+
+        Returns:
+            [type]: formatted reply string
+        """
+
+        if reply is None or reply == "":
+            s = ""
+
+        elif type(reply) == str:
+            s = reply
+
+        elif type(reply) == list:
+            s = ""
+            for x in reply:
+                if type(x) == str and " " in x:  # check if space in the string
+                    s = s + " " + "'" + str(x) + "'"
+                else:
+                    s = s + " " + str(x)
+            s = s.strip()
+
+        elif type(reply) == dict:
+            s = json.dumps(reply)
+
+        else:
+            s = repr(reply)
+
+            if s != '""':
+                s = s.strip()
+
+        # add OK status if needed
+        if not (s.startswith("OK") or s.startswith("ERROR") or s.startswith("WARNING")):
+            s = "OK " + s
+
+        s = s.strip()
+
+        return s
+
+    def parse_command_string(self, command: str, case_insensitive: int = 0):
+        """
+        Parse a command string into tool and arguments.
+        If command does not start with a dotted object.method token, then
+        assume it is the method of the default_tool.
+
+        Returns (objid, args, kwargs)
+        objid is a bound method of a class
+        args is a list of strings
+        kwargs is a dict of strings
+        """
+
+        # parse command string
+        tokens = azcam.utils.parse(command, 0)
+        cmd = tokens[0]
+
+        if case_insensitive:
+            cmd = cmd.lower()
+
+        arglist = tokens[1:]
+        args = []
+        kwargs = {}
+        if len(arglist) == 0:
+            pass
+        else:
+            for token in arglist:
+                if "=" in token:
+                    keyname, value = token.split("=")
+                    kwargs[keyname] = value
+                else:
+                    args.append(token)
+
+        if "." not in cmd:
+            # get method from db.default_tool
+            if azcam.db.default_tool is None:
+                s = f"command not recognized: {cmd} "
+                raise azcam.AzcamError(s)
+            else:
+                objid = getattr(azcam.db.tools[azcam.db.default_tool], cmd)
+
+        else:
+            # get method from tool in db.tools
+            objects = cmd.split(".")
+            if objects[0] not in azcam.db.tools:
+                raise azcam.AzcamError(f"remote call not allowed: {objects[0]}", 4)
+
+            if len(objects) == 1:
+                objid = azcam.db.tools[objects[0]]
+            elif len(objects) == 2:
+                objid = getattr(azcam.db.tools[objects[0]], objects[1])
+            elif len(objects) == 3:
+                objid = getattr(getattr(azcam.db.tools[objects[0]], objects[1]), objects[2])
+            elif len(objects) == 4:
+                objid = getattr(
+                    getattr(getattr(azcam.db.tools[objects[0]], objects[1]), objects[2]),
+                    objects[3],
+                )
+            else:
+                objid = None  # too complicated for now
+
+            # kwargs = {}
+            # l1 = len(tokens)
+            # if l1 > 1:
+            #     args = tokens[1:]
+            #     if "=" in args[0]:
+            #         # assume all keywords for now
+            #         kwargs = {}
+            #         for argtoken in args:
+            #             keyword, value = argtoken.split("=")
+            #             kwargs[keyword] = value
+            #         args = []
+            # else:
+            #     args = []
+
+        return objid, args, kwargs
 
 
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
@@ -112,7 +261,6 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 class MyBaseRequestHandler(socketserver.BaseRequestHandler):
     def __init__(self, request, client_address, server):
-
         azcam.db.cmdserver.currentclient += 1
         self.currentclient = azcam.db.cmdserver.currentclient
 
@@ -130,7 +278,6 @@ class MyBaseRequestHandler(socketserver.BaseRequestHandler):
 
         while True:
             try:
-
                 prefix_in = f"Rcv{self.currentclient:01}> "
                 prefix_out = f"Out{self.currentclient:01}>  "  # extra space for indent
 
@@ -236,7 +383,6 @@ class MyBaseRequestHandler(socketserver.BaseRequestHandler):
                 # process all other command_strings
                 # ************************************************************************
                 if command_string != "":
-
                     # execute command
                     try:
                         reply = azcam.db.cmdserver.command(command_string)
@@ -301,7 +447,6 @@ class MyBaseRequestHandler(socketserver.BaseRequestHandler):
         msg = ""
         msg1 = ""
         while True:
-
             try:
                 msg1 = self.request.recv(1024).decode()
                 if msg1 == "":
