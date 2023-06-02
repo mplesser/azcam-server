@@ -1,7 +1,7 @@
 [project]
 name = "azcam-server"
 version = "23.2"
-description = "Server application for AzCam acquisition and analysis package"
+description = "Server package for AzCam acquisition and analysis package"
 license = {file ="LICENSE"}
 readme = "README.md"
 keywords=["ccd", "imaging", "astronomy", "sensors"]
@@ -19,6 +19,9 @@ dependencies = [
 [project.urls]
 Documentation = "https://mplesser.github.io/azcam/"
 Repository = "https://github.com/mplesser/azcam/"
+
+[tool.flit.module]
+name = "azcam_server"
 
 [project.scripts]
 azcamserver = "azcam_server.start:start"

@@ -168,10 +168,10 @@ class Focus(Tools):
 
     def run(
         self,
-        exposure_time: [float, str] = "prompt",
-        number_exposures: [int, str] = "prompt",
-        focus_step: [float, str] = "prompt",
-        detector_shift: [int, str] = "prompt",
+        exposure_time: float,
+        number_exposures: int,
+        focus_step: float,
+        detector_shift: int,
     ):
         """
         Execute the focus sequence.
@@ -187,21 +187,10 @@ class Focus(Tools):
             pass
 
         else:
-            if exposure_time == "prompt":
-                self.exposure_time = float(
-                    azcam.utils.prompt("Exposure time (sec)", self.exposure_time)
-                )
-            if number_exposures == "prompt":
-                self.number_exposures = float(
-                    azcam.utils.prompt("Number of exposures", self.number_exposures)
-                )
-            if focus_step == "prompt":
-                self.focus_step = float(azcam.utils.prompt("Focus step size", self.focus_step))
-
-            if detector_shift == "prompt":
-                self.detector_shift = float(
-                    azcam.utils.prompt("Number detector rows to shift", self.detector_shift)
-                )
+            self.exposure_time = float(exposure_time)
+            self.number_exposures = int(number_exposures)
+            self.focus_step = int(focus_step)
+            self.detector_shift = int(detector_shift)
 
         abort_flag = 0
 

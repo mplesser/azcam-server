@@ -566,7 +566,7 @@ class Observe(Tools):
 
         # save pars to be changed
         impars = {}
-        azcam.utils.save_imagepars(impars)
+        azcam.db.parameters.save_imagepars(impars)
 
         # log start info
         s = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -612,7 +612,7 @@ class Observe(Tools):
                         time.sleep(1)
 
         # finish
-        azcam.utils.restore_imagepars(impars)
+        azcam.db.parameters.restore_imagepars(impars)
         self._abort_script = 0  # clear abort status
 
         return
