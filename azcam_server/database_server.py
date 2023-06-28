@@ -19,14 +19,5 @@ class AzcamDatabaseServer(AzcamDatabase):
     parameters: ParametersServer
     """parameters object"""
 
-    headers: dict
-    """header objects"""
-
-    headerorder: list
-    """header order in image header"""
-
-    logger: Logger
-    """logger object"""
-
     cmdserver: CommandServer
     """system header object"""
